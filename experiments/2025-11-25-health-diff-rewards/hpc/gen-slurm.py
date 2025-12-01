@@ -59,7 +59,8 @@ fixed_parameters = {
     "SYM_HORIZ_TRANS_RES": "128",
     "PARASITE_NUM_OFFSPRING_ON_STRESS_INTERACTION": "8",
     "HOST_MIN_CYCLES_BEFORE_REPRO": "0",
-    "SYM_MIN_CYCLES_BEFORE_REPRO": "0"
+    "SYM_MIN_CYCLES_BEFORE_REPRO": "0",
+    "HOST_AGE_MAX": "-1"
 }
 
 special_decorators = [
