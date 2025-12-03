@@ -11,3 +11,8 @@
 Differences from 2025-10-31:
 - Use 'canonical' settings as discussed
 
+## Symbulation
+
+Using refactored version.
+
+Commit hash: `f6e6caaf402a10d88becfa0c88ad905453a1ab36`
