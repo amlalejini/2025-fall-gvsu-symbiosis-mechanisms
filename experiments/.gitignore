@@ -1,2 +1,3 @@
 !base_slurm_script.txt
 test/
+*.tar.gz
