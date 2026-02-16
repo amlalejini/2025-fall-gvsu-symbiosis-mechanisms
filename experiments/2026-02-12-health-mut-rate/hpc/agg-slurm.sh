@@ -6,16 +6,18 @@
 #SBATCH --job-name aggregateData    # you can give your job a name for easier identification (same as -J)
 
 ########## Command Lines to Run ##########
+HPC_ENV_FILE=clipper-hpc-env.sh
+PROJECT_NAME=2025-fall-gvsu-symbiosis-mechanisms
+REPO_DIR=/mnt/home/kelleyde/research/${PROJECT_NAME}  
 
-module load python 
-
-source /research/2025-fall-gvsu-symbiosis-mechanisms/pyenv/bin/activate
+source ${HPC_ENV_FILEPATH}
+source ${REPO_DIR}/pyenv/bin/activate
 
 DATA_DIR=/mnt/scratch/lalejina_scratch/kelleyde/data/2025-fall-gvsu-symbiosis-mechanisms/2026-02-12-health-mut-rate/
 DUMP_DIR=/research/2025-fall-gvsu-symbiosis-mechanisms/experiments/2026-02-12-health-mut-rate/
 SUMMARY_UPDATE=500000
 
-srun python /research/2025-fall-gvsu-symbiosis-mechanisms/experiments/2026-02-12-health-mut-rate/analysis/aggregate.py \
+srun python3 ${REPO_DIR}/experiments/2026-02-12-health-mut-rate/analysis/aggregate.py \
   --data_dir ${DATA_DIR} \
   --dump_dir ${DUMP_DIR} \
   --summary_update ${SUMMARY_UPDATE}
