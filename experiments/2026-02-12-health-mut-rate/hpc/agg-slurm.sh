@@ -9,13 +9,13 @@
 
 module load python 
 
-source home/kelleyde/research/2025-fall-gvsu-symbiosis-mechanisms/pyenv/bin/activate
+source /research/2025-fall-gvsu-symbiosis-mechanisms/pyenv/bin/activate
 
-DATA_DIR=/home/kelleyde/mnt/scratch/lalejina_scratch/kelleyde/data/2025-fall-gvsu-symbiosis-mechanisms/2026-02-12-health-mut-rate/
-DUMP_DIR=/home/kelleyde/research/2025-fall-gvsu-symbiosis-mechanisms/experiments/2026-02-12-health-mut-rate/
+DATA_DIR=/mnt/scratch/lalejina_scratch/kelleyde/data/2025-fall-gvsu-symbiosis-mechanisms/2026-02-12-health-mut-rate/
+DUMP_DIR=/research/2025-fall-gvsu-symbiosis-mechanisms/experiments/2026-02-12-health-mut-rate/
 SUMMARY_UPDATE=500000
 
-srun python home/kelleyde/research/2025-fall-gvsu-symbiosis-mechanisms/experiments/2026-02-12-health-mut-rate/analysis/aggregate.py \
+srun python /research/2025-fall-gvsu-symbiosis-mechanisms/experiments/2026-02-12-health-mut-rate/analysis/aggregate.py \
   --data_dir ${DATA_DIR} \
   --dump_dir ${DUMP_DIR} \
   --summary_update ${SUMMARY_UPDATE}
