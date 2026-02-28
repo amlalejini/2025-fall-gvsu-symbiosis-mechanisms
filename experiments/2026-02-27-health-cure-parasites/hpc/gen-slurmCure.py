@@ -31,7 +31,7 @@ base_slurm_script_fpath = "./base_slurm_script.txt"
 # Create combos
 combos = CombinationCollector()
 
-num_updates = 200,000
+num_updates = 200000
 
 # Parameters that do not change across treatments for this experiment.
 fixed_parameters = {
@@ -72,6 +72,7 @@ combos.register_var("symbiont__COPY_OVER")
 combos.register_var("cycle_prop__COPY_OVER")
 combos.register_var("interaction_multiplier__COPY_OVER")
 combos.register_var("task_credit__COPY_OVER")
+combos.register_var("cure_host__COPY_OVER")
 
 combos.add_val(
     "symbiont__COPY_OVER",
@@ -109,9 +110,8 @@ combos.add_val(
 
 # no cure, cure halfway through 
 combos.add_val(
-    "cure_host_COPY_OVER",
+    "cure_host__COPY_OVER",
     [
-        "-CURE 0 -CURE_UPDATES 0",
         f"-CURE 1 -CURE_UPDATES {num_updates/2}"
     ]
 )

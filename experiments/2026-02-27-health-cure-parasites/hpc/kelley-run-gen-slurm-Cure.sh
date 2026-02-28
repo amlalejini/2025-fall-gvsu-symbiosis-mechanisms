@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 REPLICATES=20
-EXP_SLUG=2025-10-31-health-cure-parasite
+EXP_SLUG=2026-02-27-health-cure-parasites-Cure
 SEED_OFFSET=120000
 JOB_TIME=24:00:00
 JOB_MEM=8G
@@ -25,7 +25,7 @@ source ${REPO_DIR}/pyenv/bin/activate
 
 # (2) Generate slurm script
 #   - This will generate an events file for each run
-python3 gen-slurm.py \
+python3 gen-slurmCure.py \
   --runs_per_subdir ${RUNS_PER_SUBDIR} \
   --time_request ${JOB_TIME} \
   --mem ${JOB_MEM} \
