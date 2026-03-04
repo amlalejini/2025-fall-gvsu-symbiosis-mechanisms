@@ -9,10 +9,9 @@ PROJECT_NAME=2025-fall-gvsu-symbiosis-mechanisms
 RUNS_PER_SUBDIR=1000
 USERNAME=lalejini
 ACCOUNT=devolab
-# HPC_ENV_FILE=clipper-hpc-env.sh
-HPC_ENV_FILE=msu-hpc-env.sh
+HPC_ENV_FILE=clipper-hpc-env.sh
 
-REPO_DIR=/Users/lalejina/devo_ws/${PROJECT_NAME}
+REPO_DIR=/home/kelleyde/research/${PROJECT_NAME}
 HOME_EXP_DIR=${REPO_DIR}/experiments/${EXP_SLUG}
 
 DATA_DIR=${HOME_EXP_DIR}/hpc/test/data
@@ -35,5 +34,4 @@ python3 gen-slurm.py \
   --replicates ${REPLICATES} \
   --job_dir ${JOB_DIR} \
   --seed_offset ${SEED_OFFSET} \
-  --hpc_account ${ACCOUNT} \
   --hpc_env_file ${HPC_ENV_FILEPATH}
