@@ -93,7 +93,8 @@ summary_data <- summary_data %>%
   mutate(
     treatment = paste0(
       sym_condition,
-      "_CURE=", CURE
+      "_CURE=", CURE,
+      "_CUP=", CURE_UPDATES
     )
   ) %>%
   mutate(
@@ -117,6 +118,7 @@ time_data <- read_csv(time_data_path)
 # Do any universal preprocessing
 time_data <- time_data %>%
   mutate(
+    seed1 = SEED,
     SEED = as.factor(SEED),
     START_MOI = as.factor(START_MOI),
     VERTICAL_TRANSMISSION = as.factor(VERTICAL_TRANSMISSION),
@@ -134,9 +136,17 @@ time_data <- time_data %>%
     ),
   ) %>%
   mutate(
+    seed_type = case_when(
+      seed1 >= 160200 ~ "160200",
+      seed1 < 160200 ~ "160150"
+    )
+  ) %>%
+  mutate(
     treatment = paste0(
       sym_condition,
-      "_CURE=", CURE
+      seed_type,
+      "_CURE=", CURE,
+      "_CUP=", CURE_UPDATES
     )
   ) %>%
   mutate(
@@ -151,7 +161,7 @@ time_data <- time_data %>%
 
 ```{r}
 sym_min_pop_sizes <- time_data %>%
-  group_by(SEED, CURE) %>%
+  group_by(treatment) %>%
   slice_min(
     OrgCounts_hosted_sym_count,
     n = 1
@@ -170,7 +180,7 @@ reps_with_extinct_syms <- sym_min_pop_sizes %>%
   )
 
 host_min_pop_sizes <- time_data %>%
-  group_by(SEED, CURE) %>%
+  group_by(treatment) %>%
   slice_min(
     OrgCounts_host_count,
     n = 1
@@ -272,6 +282,7 @@ host_parent_tasks_all_time_by_task <- host_over_time_parent_task_data %>%
     treatment,
     sym_condition,
     CURE,
+    CURE_UPDATES,
     task
   ) %>%
   summarize(
@@ -283,6 +294,7 @@ host_parent_tasks_all_time_by_task <- host_over_time_parent_task_data %>%
     treatment,
     sym_condition,
     CURE,
+    CURE_UPDATES,
     task
   ) %>%
   summarize(
@@ -329,7 +341,7 @@ host_parent_tasks_all_time_by_task_plt <- host_parent_tasks_all_time_by_task %>%
     limits = c(0, 51)
   ) +
   facet_wrap(
-    ~CURE,
+    ~treatment,
     axes = "all_x",
     labeller = label_both
   ) +
@@ -370,7 +382,8 @@ host_total_different_parent_tasks_all_time <- host_over_time_parent_task_data %>
     SEED,
     treatment,
     sym_condition,
-    CURE
+    CURE,
+    CURE_UPDATES
   ) %>%
   # Summarize across tasks (by seed)
   summarize(
@@ -459,6 +472,7 @@ sym_parent_tasks_all_time_by_task <- over_time_sym_parent_task_data %>%
     treatment,
     sym_condition,
     CURE,
+    CURE_UPDATES,
     task
   ) %>%
   summarize(
@@ -470,6 +484,7 @@ sym_parent_tasks_all_time_by_task <- over_time_sym_parent_task_data %>%
     treatment,
     sym_condition,
     CURE,
+    CURE_UPDATES,
     task
   ) %>%
   summarize(
@@ -518,7 +533,7 @@ sym_parent_tasks_all_time_by_task_plt <- sym_parent_tasks_all_time_by_task %>%
     limits = c(0, 51)
   ) +
   facet_wrap(
-    ~CURE,
+    ~treatment,
     axes = "all_x",
     labeller = label_both
   ) +
@@ -565,7 +580,7 @@ host_parent_num_task_sets_plt <- time_data %>%
   scale_color_bright() +
   scale_fill_bright() +
   facet_wrap(
-    ~CURE,
+    ~treatment,
     axes = "all_x",
     labeller = label_both
   ) +
@@ -584,12 +599,18 @@ ggsave(
 #### Host Num Task Set One Graph
 
 ```{r}
-cure_1_data <- time_data %>%
-  filter(CURE == 1, update >= 100000)
-cure_2_data <- time_data %>% 
-  filter(CURE == 0)
+half_data <- time_data %>%
+  filter(CURE_UPDATES == 100000, update >= 100000)
+quarter_data <- time_data %>%
+  filter(CURE_UPDATES == 50000, update >= 50000)
+three_quarter_data <- time_data %>%
+  filter(CURE_UPDATES == 150000, update >= 150000)
+no_sym_data <- time_data %>% 
+  filter(sym_condition == "no-syms", seed1 >= 160200)
+mut_no_cure_data <- time_data %>% 
+  filter(CURE_UPDATES == 0, sym_condition == "mutualist")
 
-sliced_time_data <- bind_rows(cure_1_data, cure_0_data)
+sliced_time_data <- bind_rows(half_data, quarter_data, three_quarter_data, no_sym_data, mut_no_cure_data)
 
 host_parent_num_task_sets_plt <- sliced_time_data %>%
   filter(update %% 500 == 0) %>%
@@ -617,7 +638,7 @@ host_parent_num_task_sets_plt <- sliced_time_data %>%
 ggsave(
   file = paste(plot_dir, "single_host_num_task_plt.pdf", sep = "/"),
   plot = host_parent_num_task_sets_plt,
-  width = 15,
+  width = 20,
   height = 15
 )
 ```
@@ -646,7 +667,7 @@ host_parent_entropy_task_sets_plt <- time_data %>%
   scale_color_bright() +
   scale_fill_bright() +
   facet_wrap(
-    ~CURE,
+    ~treatment,
     axes = "all_x",
     labeller = label_both
   ) +
@@ -690,7 +711,7 @@ host_parent_entropy_task_sets_plt <- sliced_time_data %>%
 ggsave(
   file = paste(plot_dir, "single_host_parent_entropy_plt.pdf", sep = "/"),
   plot = host_parent_entropy_task_sets_plt,
-  width = 15,
+  width = 20,
   height = 15
 )
 ``` 
@@ -721,7 +742,7 @@ symbiont_parent_num_task_sets_plt <- time_data %>%
   scale_color_bright() +
   scale_fill_bright() +
   facet_wrap(
-    ~CURE,
+    ~treatment,
     axes = "all_x",
     labeller = label_both
   ) +
@@ -760,7 +781,7 @@ symbiont_parent_entropy_task_sets_plt <- time_data %>%
   scale_color_bright() +
   scale_fill_bright() +
   facet_wrap(
-    ~CURE,
+    ~treatment,
     axes = "all_x",
     labeller = label_both
   ) +
@@ -774,6 +795,12 @@ ggsave(
   height = 15
 )
 ```
+
+
+
+
+
+# CUT OFF
 
 ## Task profile matches over time
 
@@ -801,7 +828,7 @@ host_sym_any_matches_total_plt <- time_data %>%
   scale_color_bright() +
   scale_fill_bright() +
   facet_wrap(
-    ~CURE,
+    ~treatment,
     axes = "all_x",
     labeller = label_both
   ) +
