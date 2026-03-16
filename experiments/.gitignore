@@ -3,3 +3,5 @@ test/
 *.tar.gz
 
 tasks_over_time_*.pdf
+
+tar-data/
