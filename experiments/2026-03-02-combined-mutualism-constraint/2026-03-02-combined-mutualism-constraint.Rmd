@@ -271,6 +271,9 @@ facet_titles[[task_rewards_exp_slug]] <- "Function reward levels"
 facet_titles[[donate_prop_exp_slug]] <- "Mutualist donate proportion"
 facet_titles[[synergy_exp_slug]] <- "Synergy factor"
 
+v <- color("vibrant")(7)
+color_pal <- c(v[["blue"]], v[["magenta"]])
+
 plot_max_complexity_bar <- function(
   experiment_slug
 ) {
@@ -319,12 +322,12 @@ plot_max_complexity_bar <- function(
       manual = TRUE,
       inherit.aes = FALSE,
       tip_length = c(0),
-      textsize = 2.5,
+      textsize = 3,
       vjust = -0.3
     ) +
     scale_x_discrete() +
-    scale_fill_bright() +
-    scale_color_bright() +
+    scale_fill_manual(values = color_pal) +
+    scale_color_manual(values = color_pal) +
     scale_y_continuous(
       limits = c(0, 6),
       breaks = c(0, 1, 2, 3, 4, 5)
@@ -407,7 +410,7 @@ ggsave(
 
 ```{r}
 x_labels <- c("None", "Mut.")
-y_label <- "Function\ncomplexity"
+y_label <- "Host function\ncomplexity"
 
 shared_theme <- theme(
   strip.background = element_rect(
@@ -489,7 +492,51 @@ save_plot(
   ),
   plot = plot_panel,
   base_width = 7,
-  base_height = 8.25,
+  base_height = 10,
   dpi = 600
 )
+```
+
+## Analyses for manuscript
+
+Bimodal distribution of hosts in x0.5 function reward environment.
+
+```{r}
+temp <- max_complexity_data %>%
+  filter(experiment == task_rewards_exp_slug & sym_condition == "no-syms" & treatment == "x0.5") %>%
+  group_by(
+    max_task_complexity
+  ) %>%
+  summarise(
+    n = n()
+  )
+temp
+```
+
+Distribution of constrained host populations at synergy factor 2
+
+```{r}
+temp <- max_complexity_data %>%
+  filter(experiment == synergy_exp_slug & sym_condition == "mutualist" & treatment == "2") %>%
+  group_by(
+    max_task_complexity
+  ) %>%
+  summarise(
+    n = n()
+  )
+temp
+```
+
+Distribution of constrained host populations at synergy factor 1
+
+```{r}
+temp <- max_complexity_data %>%
+  filter(experiment == synergy_exp_slug & sym_condition == "mutualist" & treatment == "1") %>%
+  group_by(
+    max_task_complexity
+  ) %>%
+  summarise(
+    n = n()
+  )
+temp
 ```
